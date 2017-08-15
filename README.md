@@ -1,7 +1,7 @@
 # asynctnt-queue
 
-[![Build Status](https://travis-ci.org/igorcoding/asynctnt_queue.svg?branch=master)](https://travis-ci.org/igorcoding/asynctnt_queue)
-[![PyPI](https://img.shields.io/pypi/v/asynctnt_queue.svg)](https://pypi.python.org/pypi/asynctnt_queue)
+[![Build Status](https://travis-ci.org/igorcoding/asynctnt-queue.svg?branch=master)](https://travis-ci.org/igorcoding/asynctnt-queue)
+[![PyPI](https://img.shields.io/pypi/v/asynctnt-queue.svg)](https://pypi.python.org/pypi/asynctnt-queue)
 
 
 asynctnt-queue is a python/asyncio bindings library for
