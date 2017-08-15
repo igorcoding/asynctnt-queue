@@ -1,0 +1,84 @@
+language: python
+env:
+  global:
+  - ENCRYPTION_LABEL: "ece81675fc86"
+  - COMMIT_AUTHOR_EMAIL: "igorcoding@gmail.com"
+
+matrix:
+  fast_finish: true
+  include:
+
+    # osx
+    - os: osx
+      language: generic
+      env: BUILD=tests PYTHON_VERSION=3.6.0 TARANTOOL_VERSION=1_6
+
+    - os: osx
+      language: generic
+      env: BUILD=tests PYTHON_VERSION=3.6.0 TARANTOOL_VERSION=1_7
+
+    # precise python3.5 Tarantool 1.6
+    - os: linux
+      dist: precise
+      sudo: required
+      language: python
+      python: '3.5'
+      env: BUILD=quicktests TARANTOOL_VERSION=1_6
+
+    # trusty python3.5 Tarantool 1.6
+    - os: linux
+      dist: trusty
+      sudo: required
+      language: python
+      python: '3.5'
+      env: BUILD=quicktests TARANTOOL_VERSION=1_6
+
+    # trusty python3.5 Tarantool 1.7
+    - os: linux
+      dist: trusty
+      sudo: required
+      language: python
+      python: '3.5'
+      env: BUILD=tests TARANTOOL_VERSION=1_7
+
+    # trusty python3.6 Tarantool 1.7 + deploy
+    - os: linux
+      dist: trusty
+      sudo: required
+      language: python
+      python: '3.6'
+      env: BUILD=tests,docs,coverage,release TARANTOOL_VERSION=1_7
+
+cache:
+  - pip
+
+before_install:
+  - ".ci/travis-before-install.sh"
+
+install:
+  - ".ci/travis-install.sh"
+
+script:
+  - ".ci/travis-tests.sh"
+  - ".ci/travis-build-docs.sh"
+
+after_success:
+  - if [[ "${BUILD}" == *coverage* ]]; then coveralls; fi
+
+deploy:
+  - provider: releases
+    skip_cleanup: true
+    api_key:
+      secure: CJ6KqhcxNx9seTTk5bXyoEC4tyQu1stquP2E1DWn7F5rhRmuR5ApKuJfgVOZDcy3S59jTuAperW/He3CHghkHcm7JspB8270zh/rwxFx6Viw3hPXsJFAB4GbBKXSRxc6XTTa0Jh3cC3yIwNSfm2BbcJb6HiLnyeqOjoHs83fZYVK/eFeWQQc9VGSdsop7urOQC7iKLM0BXIivOVuuFGJPSCz2VvvDpx/CKbr1qJ3qHbkCJhze/D+IAudbvEmgO1IhFEQHe7oo+cBN1aTgrbZqFM55V5WH48s/CWlVb3SE+RISiPLN3fY9edbi4UKm1SFz43LQ6BNG77fttdN4sKXz7zy5/73mENt1oavhx0l0tnIMUgoEPCb3rUD4BgJaFcSAFdiX1Kv5TU5A5Yu/BsrRdaScwdDw+vpvdQCoucFBn2lXVotyOHT/fFKiEjQ6WRRxMnaukvQcIhoLn4N+jHEh2txFTyDE5iMeXDuqf730xTjwC34Bixru0NANzJsT+MJBZTND7rWA19M6TLxHcAeDgePYVdfgMZt+944eN/qeQcYgDSaKM5KGW3pibG8M4hhqfr1Zcm0LI8kZA9zVV9fahK2Gt6UIbMI/1PzzVLRYF7lFYfePsmToj6QoRWmn5+hQ8EfuJwsiF9nQ+cr1WzpcH5ccsB2KDfIzwWF6L2ThF4=
+    file_glob: true
+    file: dist/asynctnt_queue*.tar.gz
+    on:
+      repo: igorcoding/asynctnt_queue
+      tags: true
+      condition: '"${BUILD}" == *release*'
+
+  - provider: script
+    script: .ci/travis-release.sh
+    on:
+      tags: true
+      condition: '"${BUILD}" == *release*'
