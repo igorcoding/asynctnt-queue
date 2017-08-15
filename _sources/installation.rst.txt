@@ -8,7 +8,7 @@ To install asynctnt through **pip** run:
 
 .. code-block:: bash
 
-    $ pip install asynctnt_queue
+    $ pip install asynctnt-queue
 
 
 Running tests

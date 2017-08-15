@@ -1,15 +1,15 @@
 ==============
-asynctnt_queue
+asynctnt-queue
 ==============
 
-.. image:: https://travis-ci.org/igorcoding/asynctnt_queue.svg?branch=master
-    :target: https://travis-ci.org/igorcoding/asynctnt_queue
+.. image:: https://travis-ci.org/igorcoding/asynctnt-queue.svg?branch=master
+    :target: https://travis-ci.org/igorcoding/asynctnt-queue
 
-.. image:: https://img.shields.io/pypi/v/asynctnt_queue.svg
-    :target: https://pypi.python.org/pypi/asynctnt_queue
+.. image:: https://img.shields.io/pypi/v/asynctnt-queue.svg
+    :target: https://pypi.python.org/pypi/asynctnt-queue
 
 
-asynctnt_queue is a bindings library for
+asynctnt-queue is a bindings library for
 `tarantool-queue <https://github.com/tarantool/queue>`__ package in
 `Tarantool Database <https://tarantool.org/>`__. It is integrated with
 `asynctnt <https://github.com/igorcoding/asynctnt/>`__ module
@@ -17,7 +17,7 @@ asynctnt_queue is a bindings library for
 
 License
 -------
-asynctnt_queue is developed and distributed under the Apache 2.0 license.
+asynctnt-queue is developed and distributed under the Apache 2.0 license.
 
 
 .. toctree::
