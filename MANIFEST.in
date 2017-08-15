@@ -1,0 +1,3 @@
+recursive-include tests *.py
+recursive-include asynctnt_queue *.py
+include LICENSE.txt README.md

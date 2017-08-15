@@ -1,0 +1,11 @@
+asynctnt>=0.1.8
+uvloop>=0.6.7
+pep8==1.7.0
+flake8==3.2.1
+pypandoc
+twine
+coverage
+pytest
+Sphinx
+sphinx_rtd_theme
+sphinxcontrib-asyncio
