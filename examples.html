@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Examples &mdash; asynctnt_queue 0.0.1 documentation</title>
+  <title>Examples &mdash; asynctnt_queue 0.0.2 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="asynctnt_queue 0.0.1 documentation" href="index.html"/>
+    <link rel="top" title="asynctnt_queue 0.0.2 documentation" href="index.html"/>
         <link rel="next" title="API Reference" href="api.html"/>
         <link rel="prev" title="Installation" href="installation.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
             
           
@@ -93,7 +93,10 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 
@@ -160,6 +163,55 @@
             
   <div class="section" id="examples">
 <span id="asynctnt-queue-examples"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
+<p>Tarantool config:</p>
+<div class="code lua highlight-default"><div class="highlight"><pre><span></span><span class="n">box</span><span class="o">.</span><span class="n">cfg</span> <span class="p">{</span>
+    <span class="n">listen</span> <span class="o">=</span> <span class="s1">&#39;127.0.0.1:3301&#39;</span>
+<span class="p">}</span>
+
+<span class="n">box</span><span class="o">.</span><span class="n">once</span><span class="p">(</span><span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="n">function</span><span class="p">()</span>
+    <span class="n">box</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">grant</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">,</span> <span class="s1">&#39;read,write,execute&#39;</span><span class="p">,</span> <span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+<span class="n">end</span><span class="p">)</span>
+
+<span class="n">queue</span> <span class="o">=</span> <span class="n">require</span><span class="p">(</span><span class="s1">&#39;queue&#39;</span><span class="p">)</span>
+<span class="n">queue</span><span class="o">.</span><span class="n">create_tube</span><span class="p">(</span><span class="s1">&#39;test_tube&#39;</span><span class="p">,</span> <span class="s1">&#39;fifottl&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Python code:</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">asynctnt</span>
+<span class="kn">import</span> <span class="nn">asynctnt_queue</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">():</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">asynctnt</span><span class="o">.</span><span class="n">Connection</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">3301</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">asynctnt_queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+    <span class="n">test_tube</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">tube</span><span class="p">(</span><span class="s1">&#39;test_tube&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Add a task to queue</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_tube</span><span class="o">.</span><span class="n">put</span><span class="p">({</span>
+        <span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="s1">&#39;value&#39;</span>
+    <span class="p">})</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Task id: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Task status: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">status</span><span class="p">))</span>
+
+    <span class="c1"># Retrieve a task from queue</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_tube</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># ... do some work with task</span>
+
+    <span class="k">await</span> <span class="n">task</span><span class="o">.</span><span class="n">ack</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">run</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -206,7 +258,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.0.1',
+            VERSION:'0.0.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

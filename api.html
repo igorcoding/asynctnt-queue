@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Reference &mdash; asynctnt_queue 0.0.1 documentation</title>
+  <title>API Reference &mdash; asynctnt_queue 0.0.2 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="asynctnt_queue 0.0.1 documentation" href="index.html"/>
+    <link rel="top" title="asynctnt_queue 0.0.2 documentation" href="index.html"/>
         <link rel="prev" title="Examples" href="examples.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
             
           
@@ -93,7 +93,13 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#queue">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tube">Tube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task">Task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -159,6 +165,442 @@
             
   <div class="section" id="module-asynctnt_queue">
 <span id="api-reference"></span><span id="asynctnt-queue-api"></span><h1>API Reference<a class="headerlink" href="#module-asynctnt_queue" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="queue">
+<h2>Queue<a class="headerlink" href="#queue" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="asynctnt_queue.Queue">
+<em class="property">class </em><code class="descclassname">asynctnt_queue.</code><code class="descname">Queue</code><span class="sig-paren">(</span><em>conn: asynctnt.connection.Connection</em>, <em>tube_cls=&lt;class 'asynctnt_queue.tube.Tube'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/queue.html#Queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Queue" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="asynctnt_queue.Queue.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>conn: asynctnt.connection.Connection</em>, <em>tube_cls=&lt;class 'asynctnt_queue.tube.Tube'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/queue.html#Queue.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Queue.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queue constructor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>conn</strong> – asynctnt connection (see
+<a class="reference external" href="https://github.com/igorcoding/asynctnt">asynctnt</a>
+documentation)</li>
+<li><strong>tube_cls</strong> – Tube class that is used for Tube creation (default is
+<a class="reference internal" href="#asynctnt_queue.Tube" title="asynctnt_queue.Tube"><code class="xref py py-class docutils literal"><span class="pre">asynctnt_queue.Tube</span></code></a>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asynctnt_queue.Queue.conn">
+<code class="descname">conn</code><a class="headerlink" href="#asynctnt_queue.Queue.conn" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">asynctnt</span></code> connection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">asynctnt.Connection</span></code> instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Queue.statistics">
+<em class="property">coroutine </em><code class="descname">statistics</code><span class="sig-paren">(</span><em>tube_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/queue.html#Queue.statistics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Queue.statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns queue statistics (coroutine)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tube_name</strong> – If specified, statistics by a specific tube is returned,
+else statistics about all tubes is returned</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Queue.tube">
+<code class="descname">tube</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/queue.html#Queue.tube"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Queue.tube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns tube by its name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – Tube name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">self.tube_cls</span></code> instance
+(by default <a class="reference internal" href="#asynctnt_queue.Tube" title="asynctnt_queue.Tube"><code class="xref py py-class docutils literal"><span class="pre">asynctnt_queue.Tube</span></code></a>)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="tube">
+<h2>Tube<a class="headerlink" href="#tube" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="asynctnt_queue.Tube">
+<em class="property">class </em><code class="descclassname">asynctnt_queue.</code><code class="descname">Tube</code><span class="sig-paren">(</span><em>queue</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/tube.html#Tube"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Tube" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="asynctnt_queue.Tube.ack">
+<em class="property">coroutine </em><code class="descname">ack</code><span class="sig-paren">(</span><em>task_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/tube.html#Tube.ack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Tube.ack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ack task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>task_id</strong> – Task id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Task instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Tube.bury">
+<em class="property">coroutine </em><code class="descname">bury</code><span class="sig-paren">(</span><em>task_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/tube.html#Tube.bury"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Tube.bury" title="Permalink to this definition">¶</a></dt>
+<dd><p>Buries (disables) task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>task_id</strong> – Task id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Task instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asynctnt_queue.Tube.conn">
+<code class="descname">conn</code><a class="headerlink" href="#asynctnt_queue.Tube.conn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns corresponding connection object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">asynctnt.Connection</span></code> instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Tube.delete">
+<em class="property">coroutine </em><code class="descname">delete</code><span class="sig-paren">(</span><em>task_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/tube.html#Tube.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Tube.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes task from queue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>task_id</strong> – Task id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Task instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Tube.kick">
+<em class="property">coroutine </em><code class="descname">kick</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/tube.html#Tube.kick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Tube.kick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kick <cite>count</cite> tasks from queue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>count</strong> – Tasks count to kick</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Number of tasks actually kicked</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asynctnt_queue.Tube.name">
+<code class="descname">name</code><a class="headerlink" href="#asynctnt_queue.Tube.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tube name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Tube.peek">
+<em class="property">coroutine </em><code class="descname">peek</code><span class="sig-paren">(</span><em>task_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/tube.html#Tube.peek"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Tube.peek" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get task without changing its state</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>task_id</strong> – Task id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Task instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Tube.put">
+<em class="property">coroutine </em><code class="descname">put</code><span class="sig-paren">(</span><em>data</em>, <em>*</em>, <em>pri=None</em>, <em>ttl=None</em>, <em>ttr=None</em>, <em>delay=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/tube.html#Tube.put"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Tube.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Puts data to the queue and returns a newly created Task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> – Arbitrary task payload</li>
+<li><strong>pri</strong> – Task priority (0 by default)</li>
+<li><strong>ttl</strong> – Task time-to-live</li>
+<li><strong>ttr</strong> – Task time-to-run</li>
+<li><strong>delay</strong> – Task delay</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Task instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asynctnt_queue.Tube.queue">
+<code class="descname">queue</code><a class="headerlink" href="#asynctnt_queue.Tube.queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns corresponding queue object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#asynctnt_queue.Tube" title="asynctnt_queue.Tube"><code class="xref py py-class docutils literal"><span class="pre">asynctnt_queue.Tube</span></code></a> instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Tube.release">
+<em class="property">coroutine </em><code class="descname">release</code><span class="sig-paren">(</span><em>task_id</em>, <em>*</em>, <em>delay=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/tube.html#Tube.release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Tube.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release task (return to queue) with delay if specified</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>task_id</strong> – Task id</li>
+<li><strong>delay</strong> – Time in seconds before task will become ready again</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Task instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Tube.statistics">
+<code class="descname">statistics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/tube.html#Tube.statistics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Tube.statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return tube’s statistics (identical to queue.statistics(tube_name))</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tube’s statistics</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Tube.take">
+<em class="property">coroutine </em><code class="descname">take</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/tube.html#Tube.take"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Tube.take" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes task from the queue, waiting the timeout if specified</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> – Seconds to wait for ready tasks</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Task instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Tube.touch">
+<em class="property">coroutine </em><code class="descname">touch</code><span class="sig-paren">(</span><em>task_id</em>, <em>increment</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/tube.html#Tube.touch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Tube.touch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update task ttl and/or ttr by increment value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>task_id</strong> – Task id</li>
+<li><strong>increment</strong> – Seconds to add to ttr</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Task instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="task">
+<h2>Task<a class="headerlink" href="#task" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="asynctnt_queue.Task">
+<em class="property">class </em><code class="descclassname">asynctnt_queue.</code><code class="descname">Task</code><span class="sig-paren">(</span><em>tube</em>, <em>tnt_tuple</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/task.html#Task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Task" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="asynctnt_queue.Task.ack">
+<em class="property">coroutine </em><code class="descname">ack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/task.html#Task.ack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Task.ack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ack task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Task instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Task.bury">
+<em class="property">coroutine </em><code class="descname">bury</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/task.html#Task.bury"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Task.bury" title="Permalink to this definition">¶</a></dt>
+<dd><p>Buries (disables) task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Task instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asynctnt_queue.Task.data">
+<code class="descname">data</code><a class="headerlink" href="#asynctnt_queue.Task.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Task data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Task.delete">
+<em class="property">coroutine </em><code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/task.html#Task.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Task.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes task from queue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Task instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Task.peek">
+<em class="property">coroutine </em><code class="descname">peek</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/task.html#Task.peek"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Task.peek" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get task without changing its state</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Task instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Task.release">
+<em class="property">coroutine </em><code class="descname">release</code><span class="sig-paren">(</span><em>*</em>, <em>delay=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/task.html#Task.release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Task.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release task (return to queue) with delay if specified</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>delay</strong> – Time in seconds before task will become ready again</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Task instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asynctnt_queue.Task.status">
+<code class="descname">status</code><a class="headerlink" href="#asynctnt_queue.Task.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Task status</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">asynctnt_queue.Status</span></code> instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asynctnt_queue.Task.task_id">
+<code class="descname">task_id</code><a class="headerlink" href="#asynctnt_queue.Task.task_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Task id</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynctnt_queue.Task.touch">
+<em class="property">coroutine </em><code class="descname">touch</code><span class="sig-paren">(</span><em>increment</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/task.html#Task.touch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Task.touch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update task ttl and/or ttr by increment value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>increment</strong> – Seconds to add to ttr</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Task instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asynctnt_queue.Task.tube">
+<code class="descname">tube</code><a class="headerlink" href="#asynctnt_queue.Task.tube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Task’s tube</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="asynctnt_queue.exceptions.QueueError">
+<em class="property">class </em><code class="descclassname">asynctnt_queue.exceptions.</code><code class="descname">QueueError</code><a class="reference internal" href="_modules/asynctnt_queue/exceptions.html#QueueError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.exceptions.QueueError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base QueueError exception</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="asynctnt_queue.exceptions.TaskEmptyError">
+<em class="property">class </em><code class="descclassname">asynctnt_queue.exceptions.</code><code class="descname">TaskEmptyError</code><a class="reference internal" href="_modules/asynctnt_queue/exceptions.html#TaskEmptyError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.exceptions.TaskEmptyError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when Tarantool responds with empty body for task</p>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -203,7 +645,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.0.1',
+            VERSION:'0.0.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

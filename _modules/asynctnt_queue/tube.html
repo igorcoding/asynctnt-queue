@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>asynctnt_queue.tube &mdash; asynctnt_queue 0.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="asynctnt_queue 0.0.2 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> asynctnt_queue
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">asynctnt_queue</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>asynctnt_queue.tube</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for asynctnt_queue.tube</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.task</span> <span class="k">import</span> <span class="n">Task</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s1">&#39;Tube&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="n">_FUNCS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;put&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;take&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;touch&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ack&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;release&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;peek&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;bury&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;kick&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;delete&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;drop&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">build_func_name</span><span class="p">(</span><span class="n">tube_name</span><span class="p">,</span> <span class="n">func_name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;queue.tube.</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tube_name</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Tube"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Tube">[docs]</a><span class="k">class</span> <span class="nc">Tube</span><span class="p">:</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s1">&#39;_queue&#39;</span><span class="p">,</span> <span class="s1">&#39;_name&#39;</span><span class="p">,</span> <span class="s1">&#39;__funcs&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">queue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__funcs</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">:</span> <span class="n">build_func_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_FUNCS</span><span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns corresponding queue object</span>
+
+<span class="sd">            :returns: :class:`asynctnt_queue.Tube` instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">conn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns corresponding connection object</span>
+
+<span class="sd">            :returns: :class:`asynctnt.Connection` instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">_conn</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Tube name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+    <span class="k">def</span> <span class="nf">_create_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">task_cls</span><span class="o">=</span><span class="n">Task</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Creates Queue Task instance from Tarantool response body</span>
+
+<span class="sd">            :param body: Response body</span>
+<span class="sd">            :param task_cls: Class to instantiate</span>
+<span class="sd">            :return: ``task_cls`` instance (by default</span>
+<span class="sd">                :class:`asynctnt_queue.Task`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">task_cls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Tube.put"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Tube.put">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">pri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ttr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Puts data to the queue and returns a newly created Task</span>
+
+<span class="sd">            :param data: Arbitrary task payload</span>
+<span class="sd">            :param pri: Task priority (0 by default)</span>
+<span class="sd">            :param ttl: Task time-to-live</span>
+<span class="sd">            :param ttr: Task time-to-run</span>
+<span class="sd">            :param delay: Task delay</span>
+<span class="sd">            :return: Task instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">opts</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">pri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;pri&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pri</span>
+
+        <span class="k">if</span> <span class="n">ttl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;ttl&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ttl</span>
+
+        <span class="k">if</span> <span class="n">ttr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;ttr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ttr</span>
+
+        <span class="k">if</span> <span class="n">delay</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;delay&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">delay</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__funcs</span><span class="p">[</span><span class="s1">&#39;put&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_task</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tube.take"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Tube.take">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Takes task from the queue, waiting the timeout if specified</span>
+
+<span class="sd">            :param timeout: Seconds to wait for ready tasks</span>
+<span class="sd">            :return: Task instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">timeout</span><span class="p">,)</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__funcs</span><span class="p">[</span><span class="s1">&#39;take&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_task</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tube.touch"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Tube.touch">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">touch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">,</span> <span class="n">increment</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Update task ttl and/or ttr by increment value</span>
+
+<span class="sd">            :param task_id: Task id</span>
+<span class="sd">            :param increment: Seconds to add to ttr</span>
+<span class="sd">            :return: Task instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">increment</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__funcs</span><span class="p">[</span><span class="s1">&#39;touch&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_task</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tube.ack"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Tube.ack">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">ack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Ack task</span>
+
+<span class="sd">            :param task_id: Task id</span>
+<span class="sd">            :return: Task instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__funcs</span><span class="p">[</span><span class="s1">&#39;ack&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_task</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tube.release"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Tube.release">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Release task (return to queue) with delay if specified</span>
+
+<span class="sd">            :param task_id: Task id</span>
+<span class="sd">            :param delay: Time in seconds before task will become ready again</span>
+<span class="sd">            :return: Task instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">opts</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">delay</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;delay&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">delay</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__funcs</span><span class="p">[</span><span class="s1">&#39;release&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_task</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tube.peek"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Tube.peek">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Get task without changing its state</span>
+
+<span class="sd">            :param task_id: Task id</span>
+<span class="sd">            :return: Task instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__funcs</span><span class="p">[</span><span class="s1">&#39;peek&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_task</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tube.bury"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Tube.bury">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">bury</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Buries (disables) task</span>
+
+<span class="sd">            :param task_id: Task id</span>
+<span class="sd">            :return: Task instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__funcs</span><span class="p">[</span><span class="s1">&#39;bury&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_task</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tube.delete"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Tube.delete">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Deletes task from queue</span>
+
+<span class="sd">            :param task_id: Task id</span>
+<span class="sd">            :return: Task instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__funcs</span><span class="p">[</span><span class="s1">&#39;delete&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_task</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tube.kick"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Tube.kick">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">kick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Kick `count` tasks from queue</span>
+
+<span class="sd">            :param count: Tasks count to kick</span>
+<span class="sd">            :return: Number of tasks actually kicked</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">count</span><span class="p">,)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__funcs</span><span class="p">[</span><span class="s1">&#39;kick&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Tube.statistics"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Tube.statistics">[docs]</a>    <span class="k">def</span> <span class="nf">statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Return tube&#39;s statistics (identical to queue.statistics(tube_name))</span>
+
+<span class="sd">            :return: Tube&#39;s statistics</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">statistics</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, igorcoding.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.0.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
