@@ -11,7 +11,7 @@ if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
     echo "deb-src https://packagecloud.io/tarantool/${TARANTOOL_VERSION}/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool_${TARANTOOL_VERSION}.list
     sudo apt-get -qq update
     sudo apt-get -y install tarantool
-    sudo tarantoolctl stop example || exit 0
+    sudo tarantoolctl stop example
     sudo apt-get install pandoc
     sudo apt-get install lua5.1 luarocks
     sudo luarocks install https://raw.githubusercontent.com/tarantool/rocks/gh-pages/queue-scm-1.rockspec
