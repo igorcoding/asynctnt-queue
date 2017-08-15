@@ -45,37 +45,83 @@ class Task:
 
     @property
     def tube(self):
+        """
+            Task's tube
+        """
         return self._tube
 
     @property
     def task_id(self):
+        """
+            Task id
+        """
         return self._task_id
 
     @property
     def status(self):
+        """
+            Task status
+
+            :returns: :class:`asynctnt_queue.Status` instance
+        """
         return self._status
 
     @property
     def data(self):
+        """
+            Task data
+        """
         return self._data
 
     def __repr__(self):
         return '<Task id={} status={}>'.format(self._task_id, self._status)
 
-    def touch(self, increment):
-        return self._tube.touch(self._task_id, increment)
+    async def touch(self, increment):
+        """
+            Update task ttl and/or ttr by increment value
 
-    def ack(self):
-        return self._tube.ack(self._task_id)
+            :param increment: Seconds to add to ttr
+            :return: Task instance
+        """
+        return await self._tube.touch(self._task_id, increment)
 
-    def release(self, *, delay=None):
-        return self._tube.release(self._task_id, delay=delay)
+    async def ack(self):
+        """
+            Ack task
 
-    def peek(self):
-        return self._tube.peek(self._task_id)
+            :return: Task instance
+        """
+        return await self._tube.ack(self._task_id)
 
-    def bury(self):
-        return self._tube.bury(self._task_id)
+    async def release(self, *, delay=None):
+        """
+            Release task (return to queue) with delay if specified
 
-    def delete(self):
-        return self._tube.delete(self._task_id)
+            :param delay: Time in seconds before task will become ready again
+            :return: Task instance
+        """
+        return await self._tube.release(self._task_id, delay=delay)
+
+    async def peek(self):
+        """
+            Get task without changing its state
+
+            :return: Task instance
+        """
+        return await self._tube.peek(self._task_id)
+
+    async def bury(self):
+        """
+            Buries (disables) task
+
+            :return: Task instance
+        """
+        return await self._tube.bury(self._task_id)
+
+    async def delete(self):
+        """
+            Deletes task from queue
+
+            :return: Task instance
+        """
+        return await self._tube.delete(self._task_id)
