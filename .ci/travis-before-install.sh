@@ -10,7 +10,7 @@ if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
     echo "deb https://packagecloud.io/tarantool/${TARANTOOL_VERSION}/ubuntu/ $release main" | sudo tee /etc/apt/sources.list.d/tarantool_${TARANTOOL_VERSION}.list
     echo "deb-src https://packagecloud.io/tarantool/${TARANTOOL_VERSION}/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool_${TARANTOOL_VERSION}.list
     sudo apt-get -qq update
-    sudo apt-get -y install tarantool
+    sudo apt-get -y install tarantool tarantool-queue
     sudo tarantoolctl stop example || exit 0
     sudo apt-get install pandoc
 elif [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
