@@ -40,4 +40,6 @@ class Queue:
             args = (tube_name,)
 
         res = await self._conn.call('queue.statistics', args)
+        if self._conn.version < (1, 7):
+            return res.body[0][0]
         return res.body[0]

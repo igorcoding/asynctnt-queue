@@ -39,3 +39,4 @@ queue.create_tube('test_tube', 'fifottl', {temporary = true})
 function truncate()
     box.space.test_tube:truncate()
 end
+box.schema.func.create('truncate', {setuid=true})

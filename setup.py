@@ -25,13 +25,13 @@ def find_version():
 
 
 setup(
-    name="asynctnt_queue",
+    name="asynctnt-queue",
     packages=["asynctnt_queue"],
     include_package_data=True,
     version=find_version(),
     author="igorcoding",
     author_email="igorcoding@gmail.com",
-    url='https://github.com/igorcoding/asynctnt_queue',
+    url='https://github.com/igorcoding/asynctnt-queue',
     license='Apache Software License',
     classifiers=[
         "Programming Language :: Python :: 3 :: Only",
