@@ -9,12 +9,13 @@ __all__ = (
 
 class Queue:
     __slots__ = (
-        '_conn', '_tube_cls', '_tubes'
+        '_conn', '_tube_cls', '_tubes', '_namespace'
     )
 
     def __init__(self,
                  conn: asynctnt.Connection,
-                 tube_cls=Tube):
+                 tube_cls=Tube,
+                 namespace='queue'):
         """
             Queue constructor.
 
@@ -25,12 +26,16 @@ class Queue:
             :param tube_cls:
                 Tube class that is used for Tube creation (default is
                 :class:`asynctnt_queue.Tube`)
+            :param namespace:
+                Variable which was used for queue module import (
+                deafult is `queue`)
         """
         assert isinstance(conn, asynctnt.Connection), \
             'conn must be asynctnt.Connection instance'
         self._conn = conn
         self._tube_cls = tube_cls
         self._tubes = {}
+        self._namespace = namespace
 
     @property
     def conn(self):
@@ -40,6 +45,15 @@ class Queue:
             :returns: :class:`asynctnt.Connection` instance
         """
         return self._conn
+
+    @property
+    def namespace(self):
+        """
+            Queues namespace
+
+            :returns: :class:`str` instance
+        """
+        return self._namespace
 
     def tube(self, name):
         """
@@ -69,7 +83,7 @@ class Queue:
         if tube_name is not None:
             args = (tube_name,)
 
-        res = await self._conn.call('queue.statistics', args)
+        res = await self._conn.call('{}.statistics'.format(self._namespace), args)
         if self._conn.version < (1, 7):
             return res.body[0][0]
         return res.body[0]

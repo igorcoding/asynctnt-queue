@@ -20,8 +20,8 @@ _FUNCS = [
 ]
 
 
-def build_func_name(tube_name, func_name):
-    return 'queue.tube.{}:{}'.format(tube_name, func_name)
+def build_func_name(namespace, tube_name, func_name):
+    return '{}.tube.{}:{}'.format(namespace, tube_name, func_name)
 
 
 class Tube:
@@ -33,14 +33,14 @@ class Tube:
         self._queue = queue
         self._name = name
 
-        self.__funcs = {f: build_func_name(self._name, f) for f in _FUNCS}
+        self.__funcs = {f: build_func_name(self._queue.namespace, self._name, f) for f in _FUNCS}
 
     @property
     def queue(self):
         """
             Returns corresponding queue object
 
-            :returns: :class:`asynctnt_queue.Tube` instance
+            :returns: :class:`asynctnt_queue.Queue` instance
         """
         return self._queue
 
@@ -51,7 +51,7 @@ class Tube:
 
             :returns: :class:`asynctnt.Connection` instance
         """
-        return self._queue._conn
+        return self._queue.conn
 
     @property
     def name(self):
