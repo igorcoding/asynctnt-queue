@@ -169,12 +169,13 @@
 
 <div class="viewcode-block" id="Queue"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Queue">[docs]</a><span class="k">class</span> <span class="nc">Queue</span><span class="p">:</span>
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s1">&#39;_conn&#39;</span><span class="p">,</span> <span class="s1">&#39;_tube_cls&#39;</span><span class="p">,</span> <span class="s1">&#39;_tubes&#39;</span>
+        <span class="s1">&#39;_conn&#39;</span><span class="p">,</span> <span class="s1">&#39;_tube_cls&#39;</span><span class="p">,</span> <span class="s1">&#39;_tubes&#39;</span><span class="p">,</span> <span class="s1">&#39;_namespace&#39;</span>
     <span class="p">)</span>
 
 <div class="viewcode-block" id="Queue.__init__"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Queue.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">conn</span><span class="p">:</span> <span class="n">asynctnt</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span>
-                 <span class="n">tube_cls</span><span class="o">=</span><span class="n">Tube</span><span class="p">):</span>
+                 <span class="n">tube_cls</span><span class="o">=</span><span class="n">Tube</span><span class="p">,</span>
+                 <span class="n">namespace</span><span class="o">=</span><span class="s1">&#39;queue&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Queue constructor.</span>
 
@@ -185,12 +186,16 @@
 <span class="sd">            :param tube_cls:</span>
 <span class="sd">                Tube class that is used for Tube creation (default is</span>
 <span class="sd">                :class:`asynctnt_queue.Tube`)</span>
+<span class="sd">            :param namespace:</span>
+<span class="sd">                Variable which was used for queue module import (</span>
+<span class="sd">                deafult is `queue`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">asynctnt</span><span class="o">.</span><span class="n">Connection</span><span class="p">),</span> \
             <span class="s1">&#39;conn must be asynctnt.Connection instance&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span> <span class="o">=</span> <span class="n">conn</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tube_cls</span> <span class="o">=</span> <span class="n">tube_cls</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tubes</span> <span class="o">=</span> <span class="p">{}</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tubes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_namespace</span> <span class="o">=</span> <span class="n">namespace</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">conn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -200,6 +205,15 @@
 <span class="sd">            :returns: :class:`asynctnt.Connection` instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Queues namespace</span>
+
+<span class="sd">            :returns: :class:`str` instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_namespace</span>
 
 <div class="viewcode-block" id="Queue.tube"><a class="viewcode-back" href="../../api.html#asynctnt_queue.Queue.tube">[docs]</a>    <span class="k">def</span> <span class="nf">tube</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -229,7 +243,7 @@
         <span class="k">if</span> <span class="n">tube_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">tube_name</span><span class="p">,)</span>
 
-        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;queue.statistics&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.statistics&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_namespace</span><span class="p">),</span> <span class="n">args</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">version</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div></div>

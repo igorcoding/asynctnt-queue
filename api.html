@@ -169,10 +169,10 @@
 <h2>Queue<a class="headerlink" href="#queue" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="asynctnt_queue.Queue">
-<em class="property">class </em><code class="descclassname">asynctnt_queue.</code><code class="descname">Queue</code><span class="sig-paren">(</span><em>conn: asynctnt.connection.Connection</em>, <em>tube_cls=&lt;class 'asynctnt_queue.tube.Tube'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/queue.html#Queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Queue" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">asynctnt_queue.</code><code class="descname">Queue</code><span class="sig-paren">(</span><em>conn: asynctnt.connection.Connection</em>, <em>tube_cls=&lt;class 'asynctnt_queue.tube.Tube'&gt;</em>, <em>namespace='queue'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/queue.html#Queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Queue" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="asynctnt_queue.Queue.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>conn: asynctnt.connection.Connection</em>, <em>tube_cls=&lt;class 'asynctnt_queue.tube.Tube'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/queue.html#Queue.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Queue.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>conn: asynctnt.connection.Connection</em>, <em>tube_cls=&lt;class 'asynctnt_queue.tube.Tube'&gt;</em>, <em>namespace='queue'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/asynctnt_queue/queue.html#Queue.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asynctnt_queue.Queue.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Queue constructor.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -184,6 +184,8 @@
 documentation)</li>
 <li><strong>tube_cls</strong> – Tube class that is used for Tube creation (default is
 <a class="reference internal" href="#asynctnt_queue.Tube" title="asynctnt_queue.Tube"><code class="xref py py-class docutils literal"><span class="pre">asynctnt_queue.Tube</span></code></a>)</li>
+<li><strong>namespace</strong> – Variable which was used for queue module import (
+deafult is <cite>queue</cite>)</li>
 </ul>
 </td>
 </tr>
@@ -200,6 +202,20 @@ documentation)</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">asynctnt.Connection</span></code> instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asynctnt_queue.Queue.namespace">
+<code class="descname">namespace</code><a class="headerlink" href="#asynctnt_queue.Queue.namespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queues namespace</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">str</span></code> instance</td>
 </tr>
 </tbody>
 </table>
@@ -377,7 +393,7 @@ else statistics about all tubes is returned</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#asynctnt_queue.Tube" title="asynctnt_queue.Tube"><code class="xref py py-class docutils literal"><span class="pre">asynctnt_queue.Tube</span></code></a> instance</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#asynctnt_queue.Queue" title="asynctnt_queue.Queue"><code class="xref py py-class docutils literal"><span class="pre">asynctnt_queue.Queue</span></code></a> instance</td>
 </tr>
 </tbody>
 </table>
