@@ -28,7 +28,7 @@ class Queue:
                 :class:`asynctnt_queue.Tube`)
             :param namespace:
                 Variable which was used for queue module import (
-                deafult is `queue`)
+                default is `queue`)
         """
         assert isinstance(conn, asynctnt.Connection), \
             'conn must be asynctnt.Connection instance'
