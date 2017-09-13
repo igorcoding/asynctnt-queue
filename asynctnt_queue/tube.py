@@ -111,7 +111,9 @@ class Tube:
             args = (timeout,)
 
         res = await self.conn.call(self.__funcs['take'], args)
-        return self._create_task(res.body)
+        if len(res.body) > 0:
+            return self._create_task(res.body)
+        return None
 
     async def touch(self, task_id, increment):
         """
