@@ -30,6 +30,11 @@ class TubeTestCase(BaseTarantoolTestCase):
         self.assertEqual(taken_t.status, Status.TAKEN)
         self.assertDictEqual(taken_t.data, t.data)
 
+    async def test__tube_take_no_tasks(self):
+        tube = self.create_tube()
+        taken_t = await tube.take(0.5)
+        self.assertIsNone(taken_t)
+
     async def test__tube_ack(self):
         tube = self.create_tube()
         t = await tube.put(self._data_obj())
