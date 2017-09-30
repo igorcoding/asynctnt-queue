@@ -43,7 +43,7 @@ setup(
         "Topic :: Database :: Front-Ends"
     ],
     install_requires=[
-        'asynctnt>=0.1.8'
+        'asynctnt>=0.1.9'
     ],
     description=description,
     long_description=long_description,

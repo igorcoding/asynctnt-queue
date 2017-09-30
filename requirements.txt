@@ -1,4 +1,4 @@
-asynctnt>=0.1.8
+asynctnt>=0.1.9
 uvloop>=0.6.7
 pep8==1.7.0
 flake8==3.2.1
