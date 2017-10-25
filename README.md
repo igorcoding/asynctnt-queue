@@ -1,6 +1,7 @@
 # asynctnt-queue
 
 [![Build Status](https://travis-ci.org/igorcoding/asynctnt-queue.svg?branch=master)](https://travis-ci.org/igorcoding/asynctnt-queue)
+[![Coverage Status](https://coveralls.io/repos/github/igorcoding/asynctnt-queue/badge.svg?branch=master)](https://coveralls.io/github/igorcoding/asynctnt-queue?branch=master)
 [![PyPI](https://img.shields.io/pypi/v/asynctnt-queue.svg)](https://pypi.python.org/pypi/asynctnt-queue)
 
 
