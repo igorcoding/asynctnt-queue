@@ -196,6 +196,8 @@ class Tube:
         """
         args = (count,)
         res = await self.conn.call(self.__funcs['kick'], args)
+        if self.conn.version < (1, 7):
+            return res.body[0][0]
         return res.body[0]
 
     def statistics(self):

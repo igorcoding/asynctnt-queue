@@ -17,6 +17,7 @@ if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
     sudo luarocks install https://raw.githubusercontent.com/tarantool/rocks/gh-pages/queue-scm-1.rockspec
 
 elif [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+    brew update
     if [[ "${TARANTOOL_VERSION}" == "1_7" ]]; then
         brew install tarantool --HEAD
     else
