@@ -25,18 +25,18 @@ class Task:
 
     def __init__(self, tube, tnt_tuple):
         self._tube = tube
-        if tnt_tuple is None or len(tnt_tuple) == 0:
+        if tnt_tuple is None or len(tnt_tuple) == 0:  # pragma: nocover
             raise TaskEmptyError('Tarantool Queue task is empty')
 
         tnt_tuple = tnt_tuple[0]
-        if tnt_tuple is None or len(tnt_tuple) == 0:
+        if tnt_tuple is None or len(tnt_tuple) == 0:  # pragma: nocover
             raise TaskEmptyError('Tarantool Queue task is empty')
 
         self._task_id = tnt_tuple[0]
         status = tnt_tuple[1]
         try:
             self._status = Status(status)
-        except ValueError:
+        except ValueError:  # pragma: nocover
             asynctnt.log.logger.warning(
                 "unknown status '{}' in task_id = {}".format(
                     status, self._task_id))

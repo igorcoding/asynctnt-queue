@@ -13,12 +13,26 @@ class TubeTestCase(BaseTarantoolTestCase):
             'key': 'value'
         }
 
+    async def test__tube_queue(self):
+        q = Queue(self.conn)
+        tube = q.tube('test_tube')
+        self.assertIs(tube.queue, q, 'queue is the same object')
+
     async def test__tube_put(self):
         tube = self.create_tube()
         t = await tube.put(self._data_obj())
         self.assertIsNotNone(t)
         self.assertIsInstance(t, Task)
         self.assertEqual(t.status, Status.READY)
+        self.assertEqual(t.task_id, 0)  # first task has id = 0
+        self.assertEqual(t.data, self._data_obj())
+
+    async def test__tube_put_options(self):
+        tube = self.create_tube()
+        t = await tube.put(self._data_obj(), pri=4, ttl=10, ttr=1, delay=0.2)
+        self.assertIsNotNone(t)
+        self.assertIsInstance(t, Task)
+        self.assertEqual(t.status, Status.DELAYED)
         self.assertEqual(t.task_id, 0)  # first task has id = 0
         self.assertEqual(t.data, self._data_obj())
 
@@ -88,6 +102,21 @@ class TubeTestCase(BaseTarantoolTestCase):
         self.assertEqual(t2.task_id, t.task_id)
         self.assertEqual(t2.status, Status.TAKEN)
         self.assertEqual(t2.data, t.data)
+
+    async def test__tube_kick(self):
+        tube = self.create_tube()
+        t = await tube.put(self._data_obj())
+        t2 = await tube.take()
+        t2 = await tube.bury(t2.task_id)
+        t3 = await tube.take(0.5)
+        self.assertIsNone(t3, 'no tasks left')
+
+        count = await tube.kick(1)
+        self.assertEqual(count, 1)
+        t3 = await tube.take(0.5)
+        self.assertEqual(t3.task_id, t2.task_id)
+        self.assertEqual(t3.status, Status.TAKEN)
+        self.assertEqual(t3.data, t2.data)
 
     async def test__tube_delete(self):
         tube = self.create_tube()

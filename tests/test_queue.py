@@ -15,6 +15,13 @@ class QueueTestCase(BaseTarantoolTestCase):
         self.assertIsInstance(tube, Tube, 'tube valid type')
         self.assertEqual(tube.conn, self.conn, 'conn valid')
 
+    def test__queue_get_tube_multiple(self):
+        q = Queue(self.conn)
+        tube1 = q.tube('test_tube')
+        tube2 = q.tube('test_tube')
+
+        self.assertIs(tube1, tube2, 'the same object')
+
     async def test__queue_statistics(self):
         q = Queue(self.conn)
         res = await q.statistics()

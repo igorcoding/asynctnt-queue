@@ -84,6 +84,6 @@ class Queue:
             args = (tube_name,)
 
         res = await self._conn.call('{}.statistics'.format(self._namespace), args)
-        if self._conn.version < (1, 7):
+        if self._conn.version < (1, 7):  # pragma: nocover
             return res.body[0][0]
         return res.body[0]

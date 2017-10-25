@@ -13,6 +13,16 @@ class TaskTestCase(BaseTarantoolTestCase):
             'key': 'value'
         }
 
+    async def test__task_tube(self):
+        tube = self.create_tube()
+        t = await tube.put(self._data_obj())
+        self.assertIs(t.tube, tube, 'tube is the same object')
+
+    async def test__task_repr(self):
+        tube = self.create_tube()
+        t = await tube.put(self._data_obj())
+        self.assertEqual(repr(t), '<Task id=0 status=Status.READY>')
+
     async def test__task_ack(self):
         tube = self.create_tube()
         t = await tube.put(self._data_obj())
