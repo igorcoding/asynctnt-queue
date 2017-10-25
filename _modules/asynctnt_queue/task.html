@@ -185,18 +185,18 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tube</span><span class="p">,</span> <span class="n">tnt_tuple</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tube</span> <span class="o">=</span> <span class="n">tube</span>
-        <span class="k">if</span> <span class="n">tnt_tuple</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">tnt_tuple</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tnt_tuple</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">tnt_tuple</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># pragma: nocover</span>
             <span class="k">raise</span> <span class="n">TaskEmptyError</span><span class="p">(</span><span class="s1">&#39;Tarantool Queue task is empty&#39;</span><span class="p">)</span>
 
         <span class="n">tnt_tuple</span> <span class="o">=</span> <span class="n">tnt_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">tnt_tuple</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">tnt_tuple</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tnt_tuple</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">tnt_tuple</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># pragma: nocover</span>
             <span class="k">raise</span> <span class="n">TaskEmptyError</span><span class="p">(</span><span class="s1">&#39;Tarantool Queue task is empty&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_task_id</span> <span class="o">=</span> <span class="n">tnt_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">status</span> <span class="o">=</span> <span class="n">tnt_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_status</span> <span class="o">=</span> <span class="n">Status</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>  <span class="c1"># pragma: nocover</span>
             <span class="n">asynctnt</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                 <span class="s2">&quot;unknown status &#39;</span><span class="si">{}</span><span class="s2">&#39; in task_id = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">status</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_id</span><span class="p">))</span>
